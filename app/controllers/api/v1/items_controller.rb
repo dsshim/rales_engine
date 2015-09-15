@@ -1,37 +1,34 @@
 class Api::V1::ItemsController < ApplicationController
-  respond_to :json, :xml
+  respond_to :json
+
+  def index
+    respond_with Item.all
+  end
 
   def show
     respond_with Item.find_by(id: params[:id])
   end
 
   def find
-    if params.include?("name")
-      respond_with Item.find_by(name: params[:name])
-    elsif params.include?("description")
-      respond_with Item.find_by(description: params[:description])
-    elsif params.include?("unit_price")
-      respond_with Item.find_by(unit_price: params[:unit_price])
-    elsif params.include?("merchant_id")
-      respond_with Item.find_by(merchant_id: params[:merchant_id])
-    else
-      respond_with Item.find_by(id: params[:id])
-    end
+    Item.find_by(item_params)
   end
 
   def find_all
-    if params.include?("name")
-      respond_with Item.where(name: params[:name])
-    elsif params.include?("description")
-      respond_with Item.where(description: params[:description])
-    elsif params.include?("unit_price")
-      respond_with Item.where(unit_price: params[:unit_price])
-    elsif params.include?("merchant_id")
-      respond_with Item.where(merchant_id: params[:merchant_id])
-    end
+    Item.where(item_params)
   end
 
   def random
     respond_with Item.order("RANDOM()").first
+  end
+
+  private
+
+  def item_params
+    params.permit(:id, :name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
+  end
+
+  def valid_params
+    params.require(:item)
+      .permit(:name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
   end
 end

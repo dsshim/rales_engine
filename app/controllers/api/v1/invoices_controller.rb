@@ -1,33 +1,34 @@
 class Api::V1::InvoicesController < ApplicationController
-  respond_to :json, :xml
+  respond_to :json
+
+  def index
+    respond_with Invoice.all
+  end
 
   def show
     respond_with Invoice.find_by(id: params[:id])
   end
 
   def find
-    if params.include?("customer_id")
-      respond_with Invoice.find_by(customer_id: params[:customer_id])
-    elsif params.include?("merchant_id")
-      respond_with Invoice.find_by(merchant_id: params[:merchant_id])
-    elsif params.include?("status")
-      respond_with Invoice.find_by(status: params[:status])
-    else
-      respond_with Invoice.find_by(id: params[:id])
-    end
+    respond_with Invoice.find_by(invoice_params)
   end
 
   def find_all
-    if params.include?("customer_id")
-      respond_with Invoice.where(customer_id: params[:customer_id])
-    elsif params.include?("merchant_id")
-      respond_with Invoice.where(merchant_id: params[:merchant_id])
-    elsif params.include?("status")
-      respond_with Invoice.where(status: params[:status])
-    end
+    respond_with Invoice.where(invoice_params)
   end
 
   def random
     respond_with Invoice.order("RANDOM()").first
+  end
+
+private
+
+  def invoice_params
+    params.permit(:id, :customer_id, :merchant_id, :status, :created_at, :updated_at)
+  end
+
+  def valid_params
+    params.require(:invoice)
+      .permit(:customer_id, :merchant_id, :status, :created_at, :updated_at)
   end
 end
