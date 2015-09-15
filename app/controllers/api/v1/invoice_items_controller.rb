@@ -30,4 +30,8 @@ class Api::V1::InvoiceItemsController < ApplicationController
         respond_with InvoiceItem.where(unit_price: params[:unit_price])
     end
   end
+
+  def random
+    respond_with InvoiceItem.order("RANDOM()").first
+  end
 end

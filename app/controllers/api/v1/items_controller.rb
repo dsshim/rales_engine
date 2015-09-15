@@ -30,4 +30,8 @@ class Api::V1::ItemsController < ApplicationController
       respond_with Item.where(merchant_id: params[:merchant_id])
     end
   end
+
+  def random
+    respond_with Item.order("RANDOM()").first
+  end
 end

@@ -23,5 +23,9 @@ class Api::V1::CustomersController < ApplicationController
     end
   end
 
+  def random
+    respond_with Customer.order("RANDOM()").first
+  end
+
 
 end
