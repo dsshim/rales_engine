@@ -12,4 +12,10 @@ class Api::V1::MerchantsController < ApplicationController
       respond_with Merchant.find_by(id: params[:id])
     end
   end
+
+  def find_all
+    if params.include?("name")
+      respond_with Merchant.where(name: params[:name])
+    end
+  end
 end
