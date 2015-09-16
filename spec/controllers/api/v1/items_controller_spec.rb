@@ -1,10 +1,12 @@
 require 'rails_helper'
+require 'factory_helper'
 
 
 RSpec.describe Api::V1::ItemsController, type: :controller do
   before do
     build_data
   end
+
   describe "GET index" do
     it "can view all items" do
 
@@ -17,7 +19,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       expect(items.first[:name]).to eq("item name")
       expect(items.first[:description]).to eq("item desc")
       expect(items.first[:merchant_id]).to eq(1)
-      expect(items.first[:unit_price]).to eq(7472)
+      expect(items.first[:unit_price]).to eq("7472.0")
     end
   end
 
@@ -29,10 +31,10 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       item = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to have_http_status(200)
-      expect(item[:name]).to eq("item name 5")
-      expect(item[:description]).to eq("item desc")
-      expect(item[:merchant_id]).to eq(1)
-      expect(item[:unit_price]).to eq(7475)
+      expect(item[:name]).to eq("item name 2")
+      expect(item[:description]).to eq("item desc 2")
+      expect(item[:merchant_id]).to eq(5)
+      expect(item[:unit_price]).to eq("5050.0")
     end
   end
 
@@ -47,7 +49,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       expect(item[:name]).to eq("item name")
       expect(item[:description]).to eq("item desc")
       expect(item[:merchant_id]).to eq(1)
-      expect(item[:unit_price]).to eq(7472)
+      expect(item[:unit_price]).to eq("7472.0")
     end
   end
 
@@ -59,11 +61,11 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       items = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to have_http_status(200)
-      expect(items.count).to eq(4)
+      expect(items.count).to eq(1)
       expect(items.first[:id]).to eq(1)
-      expect(items.last[:id]).to eq(4)
+      expect(items.last[:id]).to eq(1)
       expect(items.first[:name]).to eq("item name")
-      expect(items.last[:name]).to eq("item name 4")
+      expect(items.last[:name]).to eq("item name")
     end
   end
 
@@ -79,12 +81,43 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
     end
   end
 
-  def build_data
-    Merchant.create(id: 1, name: "merchant")
-    Item.create(id: 1, name: "item name", description: "item desc", unit_price: 7472, merchant_id: 1)
-    Item.create(id: 2, name: "item name 2", description: "item desc", unit_price: 7472, merchant_id: 1)
-    Item.create(id: 3, name: "item name 3", description: "item desc", unit_price: 7472, merchant_id: 1)
-    Item.create(id: 4, name: "item name 4", description: "item desc", unit_price: 7472, merchant_id: 1)
-    Item.create(id: 5, name: "item name 5", description: "item desc", unit_price: 7475, merchant_id: 1)
+  describe "GET most_revenue" do
+    it "returns item with most revenue" do
+      get :most_revenue, format: :json, quantity: 2
+      revenue = JSON.parse(response.body, symbolize_names: true)
+
+      expect(revenue.first[:id]).to eq(1)
+      expect(revenue.last[:id]).to eq(3)
+      expect(revenue.first[:name]).to eq("item name")
+      expect(revenue.last[:name]).to eq("item name 2")
+      expect(revenue.first[:merchant_id]).to eq(1)
+      expect(revenue.last[:merchant_id]).to eq(3)
+    end
+  end
+
+  describe "GET most_items" do
+    it "returns most items sold" do
+      get :most_items, format: :json, quantity: 3
+
+      items = JSON.parse(response.body, symbolize_names: true)
+
+      expect(items.first[:id]).to eq(1)
+      expect(items.last[:id]).to eq(4)
+      expect(items.first[:name]).to eq("item name")
+      expect(items.last[:name]).to eq("item name 2")
+      expect(items.first[:unit_price]).to eq("7472.0")
+      expect(items.last[:unit_price]).to eq("5050.0")
+    end
+  end
+
+  describe "GET best_day" do
+    it "returns the best sales day for an item"do
+      get :best_day, format: :json, id: 2
+
+      best_day = JSON.parse(response.body, symbolize_names: true)
+
+      expect(best_day.class).to eq(Hash)
+      expect(Date.parse(best_day[:best_day]).year).to eq(2015)
+    end
   end
 end

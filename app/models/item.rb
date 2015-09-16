@@ -26,16 +26,8 @@ class Item < ActiveRecord::Base
   end
 
   def best_day
-    self.invoices.success.group("invoices.created_at").sum('quantity * unit_price')
+    date = self.invoices.success.group("invoices.created_at").sum('quantity * unit_price')
     .sort_by{|key, value| value}.reverse.first.first
-
-    # invoices = self.success.where(created_at: params[:date])
-    # invoices.total_revenue(invoices.pluck(:id))
-  end
-
-  private
-
-  def get_invoice_items
-    self.invoice_items
+    {best_day: date}
   end
 end

@@ -64,7 +64,7 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
     it "returns the customers favorite_merchant" do
       customer = Customer.create(id:1, first_name: "bob", last_name: "bobson")
       build_data
-      
+
       get :favorite_merchant, format: :json, id: customer.id
 
       fav_merchant = JSON.parse(response.body, symbolize_names: true)
@@ -81,8 +81,8 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
     Invoice.create(id: 1, customer_id: 1, merchant_id: 1, status: "shipped")
     Invoice.create(id: 2, customer_id: 1, merchant_id: 2, status: "shipped")
     Invoice.create(id: 3, customer_id: 1, merchant_id: 2, status: "shipped")
-    Transaction.create(id: 1, invoice_id: 1, credit_card_number: "4242424242", credit_card_expiration_date: "12/18", result: "success")
-    Transaction.create(id: 2, invoice_id: 2, credit_card_number: "4242424242", credit_card_expiration_date: "12/18", result: "success")
-    Transaction.create(id: 3, invoice_id: 3, credit_card_number: "4242424242", credit_card_expiration_date: "12/18", result: "success")
+    Transaction.create(id: 1, invoice_id: 1, credit_card_number: "4242424242", result: "success")
+    Transaction.create(id: 2, invoice_id: 2, credit_card_number: "4242424242", result: "success")
+    Transaction.create(id: 3, invoice_id: 3, credit_card_number: "4242424242", result: "success")
   end
 end

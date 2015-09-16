@@ -17,7 +17,7 @@ RSpec.describe Api::V1::InvoiceItemsController, type: :controller do
       expect(invoice_items.first[:item_id]).to eq(1)
       expect(invoice_items.first[:invoice_id]).to eq(1)
       expect(invoice_items.first[:quantity]).to eq(30)
-      expect(invoice_items.first[:unit_price]).to eq(8797)
+      expect(invoice_items.first[:unit_price]).to eq("8797.0")
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Api::V1::InvoiceItemsController, type: :controller do
       expect(invoice_item[:item_id]).to eq(1)
       expect(invoice_item[:invoice_id]).to eq(1)
       expect(invoice_item[:quantity]).to eq(30)
-      expect(invoice_item[:unit_price]).to eq(8797)
+      expect(invoice_item[:unit_price]).to eq("8797.0")
     end
   end
 
@@ -46,8 +46,8 @@ RSpec.describe Api::V1::InvoiceItemsController, type: :controller do
       expect(response).to have_http_status(200)
       expect(invoice_item[:item_id]).to eq(1)
       expect(invoice_item[:invoice_id]).to eq(1)
-      expect(invoice_item[:quantity]).to eq(30)
-      expect(invoice_item[:unit_price]).to eq(8797)
+      expect(invoice_item[:quantity]).to eq(10)
+      expect(invoice_item[:unit_price]).to eq("8797.0")
     end
   end
 
