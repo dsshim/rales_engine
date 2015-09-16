@@ -33,7 +33,7 @@ task :import => [:environment] do
   CSV.foreach(transaction_file, :headers => true, header_converters: :symbol) do |row|
     Transaction.create!(row.to_hash)
   end
-
-  InvoiceItem.all.each{|ii| ii.update!(unit_price: (ii.unit_price/100).to_s)}
-  Item.all.each{|ii| ii.update!(unit_price: (ii.unit_price/100).to_s)}
+  #
+  # InvoiceItem.all.each{|ii| ii.update!(unit_price: (ii.unit_price/100).to_s)}
+  # Item.all.each{|ii| ii.update!(unit_price: (ii.unit_price/100).to_s)}
 end
