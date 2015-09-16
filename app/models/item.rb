@@ -18,11 +18,19 @@ class Item < ActiveRecord::Base
 
   def self.most_items(quantity)
     ids = Invoice.success.joins(:items).group(:item_id).sum(('quantity'))
-    .sort_by{|key, value| value}.reverse[0...quantity].reverse.map(&:first)
+    .sort_by{|key, value| value}.reverse[0...quantity].map(&:first)
 
     ids.map do |item_id|
       Item.find_by(id: item_id)
     end
+  end
+
+  def best_day
+    self.invoices.success.group("invoices.created_at").sum('quantity * unit_price')
+    .sort_by{|key, value| value}.reverse.first.first
+
+    # invoices = self.success.where(created_at: params[:date])
+    # invoices.total_revenue(invoices.pluck(:id))
   end
 
   private

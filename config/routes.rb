@@ -50,6 +50,8 @@ Rails.application.routes.draw do
       get "/merchants/most_items", to: "merchants#most_items"
       get "/items/most_revenue", to: "items#most_revenue"
       get "/items/most_items", to: "items#most_items"
+      get "/merchants/revenue", to: "merchants#revenue"
+      get "/items/:id/best_day", to: "items#best_day"
 
       resources :merchants, only: [:show, :index]
       resources :customers, only: [:show, :index]

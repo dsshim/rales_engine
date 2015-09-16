@@ -8,7 +8,7 @@ class Merchant < ActiveRecord::Base
   end
 
   def favorite_customer
-    Customer.where(id: success.favorite_customer)
+    Customer.find_by(id: success.favorite_customer)
   end
 
   def success
@@ -33,14 +33,22 @@ class Merchant < ActiveRecord::Base
   end
 
   def self.most_revenue(quantity)
-    all.sort_by do |merchant|
+    self.all.sort_by do |merchant|
       merchant.invoices.success.joins(:invoice_items).sum("quantity * unit_price")
     end.reverse[0...quantity]
   end
 
   def self.most_items(quantity)
-    all.sort_by do |merchant|
+    self.all.sort_by do |merchant|
       merchant.invoices.success.joins(:invoice_items).sum("quantity")
     end.reverse[0...quantity]
+  end
+
+  def self.revenue(date)
+    revenue = self.all.map do |merchant|
+      merchant.invoices.where(created_at: date)
+        .success.joins(:invoice_items).sum("quantity * unit_price")
+    end
+    {total_revenue: revenue.inject(:+)}
   end
 end
