@@ -19,6 +19,9 @@
 RSpec.configure do |config|
   require 'capybara/rspec'
   require 'database_cleaner'
+  require 'simplecov'
+
+  SimpleCov.start 'rails'
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

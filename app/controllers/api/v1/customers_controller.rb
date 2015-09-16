@@ -18,7 +18,11 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def random
-    respond_with Customer.order("RANDOM()").first
+    respond_with Customer.random
+  end
+
+  def favorite_merchant
+    respond_with Customer.find_by(id: params[:id]).favorite_merchant
   end
 
 private
@@ -27,9 +31,9 @@ private
     params.permit(:id, :first_name, :last_name, :created_at, :updated_at)
   end
 
-  def valid_params
-    params.require(:customer).permit(:first_name, :last_name, :created_at, :updated_at)
-  end
+  # def valid_params
+  #   params.require(:customer).permit(:first_name, :last_name, :created_at, :updated_at)
+  # end
 
 
 end

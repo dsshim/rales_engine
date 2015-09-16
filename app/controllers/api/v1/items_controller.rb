@@ -10,15 +10,15 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def find
-    Item.find_by(item_params)
+    respond_with Item.find_by(item_params)
   end
 
   def find_all
-    Item.where(item_params)
+    respond_with Item.where(item_params)
   end
 
   def random
-    respond_with Item.order("RANDOM()").first
+    respond_with Item.random
   end
 
   private
@@ -27,8 +27,8 @@ class Api::V1::ItemsController < ApplicationController
     params.permit(:id, :name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
   end
 
-  def valid_params
-    params.require(:item)
-      .permit(:name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
-  end
+  # def valid_params
+  #   params.require(:item)
+  #     .permit(:name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
+  # end
 end

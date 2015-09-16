@@ -18,7 +18,7 @@ class Api::V1::InvoicesController < ApplicationController
   end
 
   def random
-    respond_with Invoice.order("RANDOM()").first
+    respond_with Invoice.random
   end
 
 private
@@ -27,8 +27,8 @@ private
     params.permit(:id, :customer_id, :merchant_id, :status, :created_at, :updated_at)
   end
 
-  def valid_params
-    params.require(:invoice)
-      .permit(:customer_id, :merchant_id, :status, :created_at, :updated_at)
-  end
+  # def valid_params
+  #   params.require(:invoice)
+  #     .permit(:customer_id, :merchant_id, :status, :created_at, :updated_at)
+  # end
 end

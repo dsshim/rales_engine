@@ -18,7 +18,7 @@ class Api::V1::TransactionsController < ApplicationController
   end
 
   def random
-    respond_with Transaction.order("RANDOM()").first
+    respond_with Transaction.random
   end
 
   private
@@ -27,8 +27,8 @@ class Api::V1::TransactionsController < ApplicationController
     params.permit(:id, :invoice_id, :credit_card_expiration_date, :credit_card_number, :result, :created_at, :updated_at)
   end
 
-  def valid_params
-    params.require(:transaction)
-      .permit(:invoice_id, :credit_card_number, :credit_card_expiration_date, :result, :created_at, :updated_at)
-  end
+  # def valid_params
+  #   params.require(:transaction)
+  #     .permit(:invoice_id, :credit_card_number, :credit_card_expiration_date, :result, :created_at, :updated_at)
+  # end
 end
