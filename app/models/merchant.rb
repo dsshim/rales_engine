@@ -8,7 +8,7 @@ class Merchant < ActiveRecord::Base
   end
 
   def favorite_customer
-    Customer.find(success.favorite_customer)
+    Customer.where(id: success.favorite_customer)
   end
 
   def success

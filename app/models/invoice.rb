@@ -14,11 +14,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.favorite_merchant
-    self.joins(:merchant).group(:merchant_id).count.sort_by { |key, value| value }.reverse.first[0]
+    self.joins(:merchant).group(:merchant_id).count.sort_by {|key, value| [value, key]}.reverse.first[0]
   end
 
   def self.favorite_customer
-    self.joins(:customer).group(:customer_id).count.sort_by {|key, value| value}.reverse.first[0]
+    self.joins(:customer).group(:customer_id).count.sort_by {|key, value| [value, key]}.reverse.first[0]
   end
 
   def self.transactions(ids)
