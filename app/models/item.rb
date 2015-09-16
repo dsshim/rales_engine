@@ -6,4 +6,28 @@ class Item < ActiveRecord::Base
   def self.random
     self.order("RANDOM()").first
   end
+
+  def self.most_revenue(quantity)
+    ids = Invoice.success.joins(:items).group(:item_id).sum(('quantity * invoice_items.unit_price'))
+    .sort_by{|item_revenue_pair| item_revenue_pair.last}.reverse[0...quantity].map(&:first)
+
+    ids.map do |item_id|
+      Item.find_by(id: item_id)
+    end
+  end
+
+  def self.most_items(quantity)
+    ids = Invoice.success.joins(:items).group(:item_id).sum(('quantity'))
+    .sort_by{|key, value| value}.reverse[0...quantity].reverse.map(&:first)
+
+    ids.map do |item_id|
+      Item.find_by(id: item_id)
+    end
+  end
+
+  private
+
+  def get_invoice_items
+    self.invoice_items
+  end
 end

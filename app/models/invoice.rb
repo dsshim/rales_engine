@@ -13,6 +13,10 @@ class Invoice < ActiveRecord::Base
     self.joins(:transactions).where(:transactions => {result: "success"})
   end
 
+  def self.failed
+    self.joins(:transactions).where(:transactions => {result: "failed"})
+  end
+
   def self.favorite_merchant
     self.joins(:merchant).group(:merchant_id).count.sort_by {|key, value| [value, key]}.reverse.first[0]
   end
@@ -26,6 +30,10 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.total_revenue(ids)
-    {revenue: "%.2f" % (InvoiceItem.where(invoice_id: ids).map{|ii| ii.quantity * ii.unit_price}.inject(:+)/100)}
+    {revenue: "%.2f" % (InvoiceItem.where(invoice_id: ids).map{|ii| ii.quantity * ii.unit_price.to_f}.inject(:+))}
+  end
+
+  def self.customers_with_pending_invoices(ids)
+    Customer.where(id: ids)
   end
 end

@@ -21,11 +21,20 @@ class Api::V1::ItemsController < ApplicationController
     respond_with Item.random
   end
 
+  def most_revenue
+    respond_with Item.most_revenue(params[:quantity].to_i)
+  end
+
+  def most_items
+    respond_with Item.most_items(params[:quantity].to_i)
+  end
+
   private
 
   def item_params
     params.permit(:id, :name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
   end
+
 
   # def valid_params
   #   params.require(:item)
