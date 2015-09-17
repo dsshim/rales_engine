@@ -19,17 +19,16 @@ class Merchant < ActiveRecord::Base
     self.invoices.failed
   end
 
-  def total_revenue(params)
-    if params.include?("date")
-      invoices = self.success.where(created_at: params[:date])
-      invoices.total_revenue(invoices.pluck(:id))
-    else
-      self.success.total_revenue(success.pluck(:id))
-    end
+  def total_revenue
+    {revenue: self.invoices.success.joins(:invoice_items).sum("quantity * unit_price")}
+  end
+
+  def total_revenue_by_date(date)
+    {revenue: self.invoices.success.where(created_at: date).joins(:invoice_items).sum("quantity * unit_price")}
   end
 
   def customers_with_pending_invoices
-    self.failed.customers_with_pending_invoices(failed.pluck(:customer_id))
+    failed.map{|invoice| invoice.customer}.uniq
   end
 
   def self.most_revenue(quantity)

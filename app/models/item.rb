@@ -8,26 +8,25 @@ class Item < ActiveRecord::Base
   end
 
   def self.most_revenue(quantity)
-    ids = Invoice.success.joins(:items).group(:item_id).sum(('quantity * invoice_items.unit_price'))
-    .sort_by{|item_revenue_pair| item_revenue_pair.last}.reverse[0...quantity].map(&:first)
-
-    ids.map do |item_id|
-      Item.find_by(id: item_id)
-    end
+    self.all.sort_by{|item| item.revenue}.reverse[0...quantity]
   end
 
   def self.most_items(quantity)
-    ids = Invoice.success.joins(:items).group(:item_id).sum(('quantity'))
-    .sort_by{|key, value| value}.reverse[0...quantity].map(&:first)
-
-    ids.map do |item_id|
-      Item.find_by(id: item_id)
-    end
+    amount_sold(quantity).map{|id| Item.find_by(id: id)}
   end
 
   def best_day
     date = self.invoices.success.group("invoices.created_at").sum('quantity * unit_price')
     .sort_by{|key, value| value}.reverse.first.first
     {best_day: date}
+  end
+
+  def revenue
+    self.invoices.success.joins(:invoice_items).sum("invoice_items.quantity * invoice_items.unit_price")
+  end
+
+  def self.amount_sold(quantity)
+    Invoice.success.joins(:items).group(:item_id).sum("quantity")
+      .sort_by{|k,v| v}.reverse[0...quantity].map(&:first)
   end
 end

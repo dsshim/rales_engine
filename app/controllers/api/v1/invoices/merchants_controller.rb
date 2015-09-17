@@ -4,5 +4,4 @@ class Api::V1::Invoices::MerchantsController < ApplicationController
   def show
     respond_with Invoice.find_by(id: params[:id]).merchant
   end
-
 end

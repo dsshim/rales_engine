@@ -6,7 +6,7 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def show
-    respond_with Customer.find_by(id: params[:id])
+    respond_with get_customer
   end
 
   def find
@@ -22,18 +22,16 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def favorite_merchant
-    respond_with Customer.find_by(id: params[:id]).favorite_merchant
+    respond_with get_customer.favorite_merchant
   end
 
 private
 
+  def get_customer
+    Customer.find_by(id: params[:id])
+  end
+
   def customer_params
     params.permit(:id, :first_name, :last_name, :created_at, :updated_at)
   end
-
-  # def valid_params
-  #   params.require(:customer).permit(:first_name, :last_name, :created_at, :updated_at)
-  # end
-
-
 end

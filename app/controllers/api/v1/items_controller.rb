@@ -6,7 +6,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def show
-    respond_with Item.find_by(id: params[:id])
+    respond_with get_item
   end
 
   def find
@@ -30,18 +30,16 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def best_day
-    respond_with Item.find_by(id: params[:id]).best_day
+    respond_with get_item.best_day
   end
 
   private
 
+  def get_item
+    Item.find_by(id: params[:id])
+  end
+
   def item_params
     params.permit(:id, :name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
   end
-
-
-  # def valid_params
-  #   params.require(:item)
-  #     .permit(:name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
-  # end
 end

@@ -81,7 +81,7 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
 
       revenue = JSON.parse(response.body, symbolize_names: true)
 
-      expect(revenue[:revenue]).to eq("263910.00")
+      expect(revenue[:revenue]).to eq("263910.0")
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
 
       revenue = JSON.parse(response.body, symbolize_names: true)
 
-      expect(revenue[:revenue]).to eq("263910.00")
+      expect(revenue[:revenue]).to eq("263910.0")
     end
   end
 
