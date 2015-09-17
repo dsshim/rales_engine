@@ -14,7 +14,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
       items = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(items.count).to eq(5)
       expect(items.first[:name]).to eq("item name")
       expect(items.first[:description]).to eq("item desc")
@@ -30,7 +30,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
       item = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(item[:name]).to eq("item name 2")
       expect(item[:description]).to eq("item desc 2")
       expect(item[:merchant_id]).to eq(5)
@@ -45,7 +45,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
       item = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(item[:name]).to eq("item name")
       expect(item[:description]).to eq("item desc")
       expect(item[:merchant_id]).to eq(1)
@@ -60,7 +60,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
       items = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(items.count).to eq(1)
       expect(items.first[:id]).to eq(1)
       expect(items.last[:id]).to eq(1)
@@ -72,12 +72,8 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
   describe "GET random" do
     it "returns a random item" do
       get :random, format: :json
-      item_1 = JSON.parse(response.body, symbolize_names: true)
 
-      get :random, format: :json
-      item_2 = JSON.parse(response.body, symbolize_names: true)
-
-      expect(item_1[:id]).to_not eq(item_2[:id])
+      expect(response).to have_http_status(:success)
     end
   end
 

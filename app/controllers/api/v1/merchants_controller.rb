@@ -51,13 +51,4 @@ private
   def merchant_params
     params.permit(:id, :name, :created_at, :updated_at, :date)
   end
-
-  # def merchant_revenue
-  #   Merchant.all.map{|merchant|[merchant.id, merchant.most_revenue]}.sort_by{|id, revenue| revenue}.reverse[0..params[:quantity].to_i-1]
-  # end
-
-  # def valid_params
-  #   params.require(:merchant)
-  #     .permit(:name, :created_at, :updated_at)
-  # end
 end

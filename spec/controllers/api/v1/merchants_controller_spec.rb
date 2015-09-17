@@ -13,7 +13,7 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
 
       merchants = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(merchants.count).to eq(5)
       expect(merchants.first[:name]).to eq("merchant")
     end
@@ -26,7 +26,7 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
 
       merchant = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(merchant[:name]).to eq("merchant 5")
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
 
       merchant = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(merchant[:name]).to eq("merchant")
     end
   end
@@ -50,21 +50,17 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
 
       merchants = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(merchants.count).to eq(1)
       expect(merchants.first[:name]).to eq("merchant")
     end
   end
 
-  describe "GET random" do
+  context "GET random" do
     it "returns a random merchant" do
       get :random, format: :json
-      merchant_1 = JSON.parse(response.body, symbolize_names: true)
 
-      get :random, format: :json
-      merchant_2 = JSON.parse(response.body, symbolize_names: true)
-
-      expect(merchant_1[:id]).to_not eq(merchant_2[:id])
+      expect(response).to have_http_status(:success)
     end
   end
 
@@ -82,6 +78,16 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
   describe "GET total_revenue" do
     it "returns total revenue for a specific merchant" do
       get :total_revenue, format: :json, id: Merchant.first.id
+
+      revenue = JSON.parse(response.body, symbolize_names: true)
+
+      expect(revenue[:revenue]).to eq("263910.00")
+    end
+  end
+
+  describe "GET total_revenue(date)" do
+    it "returns total revenue for a specific date" do
+      get :total_revenue, format: :json, id: Merchant.first.id, date: Invoice.first.created_at
 
       revenue = JSON.parse(response.body, symbolize_names: true)
 
@@ -120,11 +126,22 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
       get :most_items, format: :json, quantity: 2
 
       merchants = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(merchants.first[:id]).to eq(1)
       expect(merchants.last[:id]).to eq(3)
       expect(merchants.first[:name]).to eq("merchant")
       expect(merchants.last[:name]).to eq("merchant 3")
+    end
+  end
+
+  describe "GET revenue" do
+    it "returns the total revenue by date" do
+      get :revenue, format: :json, date: Invoice.last.created_at.to_s
+
+      merchant = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to have_http_status(:success)
+      expect(merchant[:total_revenue].class).to eq(String)
     end
   end
 end

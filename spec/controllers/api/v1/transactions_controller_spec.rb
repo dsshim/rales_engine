@@ -12,7 +12,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
       transactions = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(transactions.count).to eq(6)
       expect(transactions.first[:invoice_id]).to eq(1)
       expect(transactions.first[:credit_card_number]).to eq("4242424242")
@@ -27,7 +27,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
       transaction = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(transaction[:id]).to eq(6)
       expect(transaction[:credit_card_number]).to eq("4242424252")
       expect(transaction[:result]).to eq("failed")
@@ -41,7 +41,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
       transaction = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(transaction[:id]).to eq(1)
       expect(transaction[:credit_card_number]).to eq("4242424242")
       expect(transaction[:result]).to eq("success")
@@ -55,7 +55,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
       transactions = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:success)
       expect(transactions.count).to eq(5)
       expect(transactions.first[:id]).to eq(1)
       expect(transactions.last[:id]).to eq(5)
@@ -67,25 +67,8 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
   describe "GET random" do
     it "returns a random invoice" do
       get :random, format: :json
-      transaction_1 = JSON.parse(response.body, symbolize_names: true)
 
-      get :random, format: :json
-      transaction_2 = JSON.parse(response.body, symbolize_names: true)
-
-      expect(transaction_1[:id]).to_not eq(transaction_2[:id])
+      expect(response).to have_http_status(:success)
     end
-  end
-
-  def build_data
-    Merchant.create(id: 1, name: "merchant")
-    Item.create(id: 1, name: "item name", description: "item desc", unit_price: 7472, merchant_id: 1)
-    Customer.create(id: 1, first_name: "bob", last_name: "bobson")
-    Invoice.create(id: 1, customer_id: 1, merchant_id: 1, status: "shipped")
-    Transaction.create(id: 1, invoice_id: 1, credit_card_number: "4242424242", result: "success")
-    Transaction.create(id: 2, invoice_id: 1, credit_card_number: "4242424242", result: "success")
-    Transaction.create(id: 3, invoice_id: 1, credit_card_number: "4242424242", result: "success")
-    Transaction.create(id: 4, invoice_id: 1, credit_card_number: "4242424242", result: "success")
-    Transaction.create(id: 5, invoice_id: 1, credit_card_number: "4242424242", result: "success")
-    Transaction.create(id: 6, invoice_id: 1, credit_card_number: "4242424252", result: "failed")
   end
 end
