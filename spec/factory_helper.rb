@@ -1,9 +1,9 @@
 def build_data
-  @merchant_1 = Merchant.create(id: 1, name: "merchant")
-  @merchant_2 = Merchant.create(id: 2, name: "merchant 2")
-  @merchant_3 = Merchant.create(id: 3, name: "merchant 3")
-  @merchant_4 = Merchant.create(id: 4, name: "merchant 4")
-  @merchant_5 = Merchant.create(id: 5, name: "merchant 5")
+  Merchant.create(id: 1, name: "merchant")
+  Merchant.create(id: 2, name: "merchant 2")
+  Merchant.create(id: 3, name: "merchant 3")
+  Merchant.create(id: 4, name: "merchant 4")
+  Merchant.create(id: 5, name: "merchant 5")
 
   Item.create(id: 1, name: "item name", description: "item desc", unit_price: 7472, merchant_id: 1)
   Item.create(id: 2, name: "item name 2", description: "item desc 2", unit_price: 5050, merchant_id: 2)

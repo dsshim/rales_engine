@@ -4,7 +4,7 @@ class Customer < ActiveRecord::Base
   has_many :transactions, through: :invoices
 
   def self.random
-    self.order("RANDOM()").first
+    order("RANDOM()").first
   end
 
   def favorite_merchant
@@ -13,6 +13,6 @@ class Customer < ActiveRecord::Base
 
 private
   def success
-    self.invoices.success
+    invoices.success
   end
 end

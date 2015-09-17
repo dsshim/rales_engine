@@ -4,11 +4,11 @@ class Item < ActiveRecord::Base
   has_many :invoices, through: :invoice_items
 
   def self.random
-    self.order("RANDOM()").first
+    order("RANDOM()").first
   end
 
   def self.most_revenue(quantity)
-    self.all.sort_by{|item| item.revenue}.reverse[0...quantity]
+    all.sort_by{|item| item.revenue}.reverse[0...quantity]
   end
 
   def self.most_items(quantity)
@@ -16,13 +16,12 @@ class Item < ActiveRecord::Base
   end
 
   def best_day
-    date = self.invoices.success.group("invoices.created_at").sum('quantity * unit_price')
-    .sort_by{|key, value| value}.reverse.first.first
-    {best_day: date}
+    {best_day: invoices.success.group("invoices.created_at").sum('quantity * unit_price')
+    .sort_by{|key, value| value}.reverse.first.first}
   end
 
   def revenue
-    self.invoices.success.joins(:invoice_items).sum("invoice_items.quantity * invoice_items.unit_price")
+    invoices.success.joins(:invoice_items).sum("invoice_items.quantity * invoice_items.unit_price")
   end
 
   def self.amount_sold(quantity)
